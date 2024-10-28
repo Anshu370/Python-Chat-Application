@@ -2,10 +2,11 @@ import socket
 import threading
 import tkinter as tk
 from tkinter import simpledialog, scrolledtext, ttk
+from plyer import notification
 
 # Client setup
 client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-client.connect(('localhost', 12345))
+client.connect(('localhost', 1234))
 
 def receive_messages():
     while True:
@@ -17,14 +18,27 @@ def receive_messages():
                 typing_status_label.config(text=message)
             else:
                 chat_box.config(state=tk.NORMAL)
+                # Notification for join/leave messages
+                if "joined the chat" in message or "left the chat" in message:
+                    notification.notify(
+                        title='Chat Notification',
+                        message=message,
+                        timeout=5  # duration in seconds
+                    )
                 if message.startswith(username):
                     chat_box.insert(tk.END, message + '\n', 'self')
                 else:
                     chat_box.insert(tk.END, message + '\n', 'other')
+                    # Show notification only if it's not the user's own message
+                    notification.notify(
+                        title='Chat Application',
+                        message=message,
+                        timeout=2  # duration in seconds
+                    )
                 chat_box.config(state=tk.DISABLED)
                 chat_box.yview(tk.END)
-        except:
-            print('An error occurred!')
+        except Exception as e:
+            print(f'An error occurred! {e}')
             client.close()
             break
 

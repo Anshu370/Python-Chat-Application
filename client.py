@@ -23,7 +23,7 @@ def receive_messages():
                     notification.notify(
                         title='Chat Notification',
                         message=message,
-                        timeout=5  # duration in seconds
+                        timeout=5
                     )
                 if message.startswith(username):
                     chat_box.insert(tk.END, message + '\n', 'self')
@@ -33,7 +33,7 @@ def receive_messages():
                     notification.notify(
                         title='Chat Application',
                         message=message,
-                        timeout=2  # duration in seconds
+                        timeout=2
                     )
                 chat_box.config(state=tk.DISABLED)
                 chat_box.yview(tk.END)
